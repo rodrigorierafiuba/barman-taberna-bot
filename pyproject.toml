@@ -1,0 +1,21 @@
+[project]
+name = "discord-bot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Rodrigo Riera", email = "rriera@fi.uba.ar" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "discord-py>=2.7.1",
+    "dotenv>=0.9.9",
+    "logging>=0.4.9.6",
+]
+
+[project.scripts]
+discord-bot = "discord_bot:main"
+
+[build-system]
+requires = ["uv_build>=0.12.1,<0.13.0"]
+build-backend = "uv_build"
