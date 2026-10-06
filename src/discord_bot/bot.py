@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 
 import os
 from dotenv import load_dotenv
@@ -15,8 +14,25 @@ class BarmanTaberna(commands.Bot):
     """
 
     def __init__(self) -> None:
+        intents = discord.Intents.default()
+        intents.message_content = True
 
-        super().__init__(command_prefix="!", intents=discord.Intents.default())
+        super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self) -> None:
-        await self.tree.sync()
+        """
+            Setup para agregar todos los cogs al bot de discord.
+        """
+        await self.load_extension("discord_bot.cogs.moderation")
+
+    async def on_ready(self) -> None:
+        """
+            on_ready func que se muestra en la doc, es para mostrar que el
+            bot ya esta preparado para funcionar.
+        """
+        print(f"{self.user} esta listo.")
+
+if __name__ == "__main__":
+
+    bot = BarmanTaberna()
+    bot.run(TOKEN)
