@@ -1,6 +1,10 @@
 import discord
+import logging
 from discord.ext import commands
 from datetime import timedelta
+
+logger = logging.getLogger(__name__)
+
 
 class Moderation(commands.Cog):
     """
@@ -66,8 +70,17 @@ class Moderation(commands.Cog):
                 member: Miembro a kickear del servidor.
                 reason [Opcional]: Razón del kickeo del servidor.
         """
-        await member.kick(reason=reason)
-        await ctx.send(f"{member} fue kickeado del servidor.")
+        try:
+            archivo = discord.File("files/meme.jpg", filename="meme.jpg", description="Meme para el kick.")
+            embed = discord.Embed(title="🍺 Expulsado de la taberna", description=f"Nos vemos en Disney, {member.name}. Te re cabio el kick.", color=discord.Color.red())
+            embed.set_image(url="attachment://meme.jpg")
+            
+            await member.send(content=f"Fuiste kickeado del servidor por fachero y papirulo {member.name}. Nos vemos en disney.", file=archivo, embed=embed)
+            await member.kick(reason=reason)
+            await ctx.send(f"{member} fue kickeado del servidor.")
+        except discord.Forbidden:
+            await ctx.send("No pude enviarle el DM, pero voy a expulsarlo.")
+            logger.error("No pude mandarle el DM a %s", member.name)
 
     @commands.command(name="ban", description="Banea a un usuario del servidor.")
     @commands.guild_only()
@@ -108,9 +121,10 @@ class Moderation(commands.Cog):
     @commands.has_permissions(moderate_members=True)
     @commands.bot_has_permissions(moderate_members=True)
     async def timeout(self, ctx: commands.Context,
-                      member: discord.Member, *,
+                      member: discord.Member,
                       minutes: int,
-                      reason: str = None) -> None:
+                      *,
+                      reason: str | None = None) -> None:
         """
             Mutea a un usuario durante un tiempo especificado.
 
@@ -130,7 +144,7 @@ class Moderation(commands.Cog):
         duracion = timedelta(minutes=minutes)
 
         await member.timeout(duracion, reason=reason)
-        await ctx.response.send_message(f"{member.mention} se le aplico un timeout por {duracion}", ephemeral=True)
+        await ctx.send(f"{member.mention} se le aplico un timeout por {duracion}", ephemeral=True)
 
     @commands.command(name="untimeout", description="Desmutea a un usuario")
     @commands.has_permissions(moderate_members=True)
