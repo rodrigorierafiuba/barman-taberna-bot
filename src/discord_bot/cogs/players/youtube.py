@@ -45,16 +45,16 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.data = data
 
         self.title = data.get('title')
-        self.url = data.get('url')
+        self.cancion = data.get('url')
 
     @classmethod
-    async def from_url(cls, url: str, *, loop: asyncio.AbstractEventLoop | None = None, stream: bool = False) -> Self:
+    async def from_url(cls, cancion: str, *, loop: asyncio.AbstractEventLoop | None = None, stream: bool = False) -> Self:
         """
             Completar type hints y documentacion.
         """
 
         loop = loop or asyncio.get_event_loop()
-        data = await loop.run_in_executor(None, lambda: ytdlp.extract_info(url, download=not stream))
+        data = await loop.run_in_executor(None, lambda: ytdlp.extract_info(cancion, download=not stream))
 
         entries = data.get('entries')
 

@@ -54,13 +54,13 @@ class Music(commands.Cog):
     @app_commands.command(name="play", description="Pone música en el canal de voz.")
     @app_commands.guild_only()
     @app_commands.allowed_installs(guilds=True, users=False)
-    async def play(self, interaction: discord.Interaction, *, url: str) -> None:
+    async def play(self, interaction: discord.Interaction, *, cancion: str) -> None:
         """
         Busca y reproduce música utilizando yt-dlp.
 
         Args:
             interaction: Interacción de Discord.
-            url: Nombre de la canción o URL.
+            cancion: Nombre de la canción o URL.
         
         Exceptions:
             DownloadError, ValueError, OSError: Si no se pudo obtener la fuente de audio.
@@ -87,7 +87,7 @@ class Music(commands.Cog):
 
         # busco y preparo la fuente de audio
         try:
-            source: discord.AudioSource = await YTDLSource.from_url(url, stream=True)
+            source: discord.AudioSource = await YTDLSource.from_url(cancion, stream=True)
 
         except (DownloadError, ValueError, OSError):
             logger.exception("No se pudo obtener la fuente de audio.")
@@ -104,7 +104,7 @@ class Music(commands.Cog):
             await interaction.followup.send("El Barman tuvo un problema con el audio, se rompio el cassette.")
             return
 
-        await interaction.followup.send(f"Reproduciendo: {url}.\nNombre de la canción: {source.title}.\nBaila o te saco de la taberna wacho.")
+        await interaction.followup.send(f"Reproduciendo: {cancion}.\nNombre de la canción: {source.title}.\nBaila o te saco de la taberna wacho.")
 
     @app_commands.command(name="stop", description="Para desconectar al bot del canal de voz.")
     @app_commands.guild_only()
