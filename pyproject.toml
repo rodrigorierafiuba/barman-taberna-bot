@@ -11,6 +11,7 @@ dependencies = [
     "discord-py[voice]>=2.7.1",
     "dotenv>=0.9.9",
     "logging>=0.4.9.6",
+    "spotipy>=2.26.0",
     "yt-dlp[default]>=2026.8.19",
 ]
 
