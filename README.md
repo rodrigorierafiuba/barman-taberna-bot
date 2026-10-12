@@ -224,7 +224,3 @@ Si encontrás un problema o tenés una idea para una nueva característica, sent
 ## Licencia
 
 La información de la licencia va a ser agregada una vez que haya sido seleccionada.
-
----
-
-Hecho con mucha pasión y café, **Rodrigo** ☕🍻
