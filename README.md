@@ -138,8 +138,8 @@ Antes de intentar ejecutar el bot, tenemos que estar seguros de algunas cosas:
 
   **-->** **macOS**: [Tutorial de instalación](https://www.youtube.com/watch?v=KAMuQTmGJUI)
 
-  > [!IMPORTANT]
-  > `FFmpeg` tiene que estar disponible en el `PATH` de tu sistema operativo para que el bot pueda utilizarlo.
+> [!IMPORTANT]
+> `FFmpeg` tiene que estar disponible en el `PATH` de tu sistema operativo para que el bot pueda utilizarlo.
 
   Podés verificar la instalación ejecutando:
 
@@ -203,7 +203,7 @@ SPOTIFY_CLIENT_SECRET=tu_client_secret
 ```
 
 > [!WARNING]
-> Creo que no te tengo que decir esto, pero por las dudas, nunca subas el `.env` aun repo, siempre el primer paso es guardar eso en el .gitignore
+> Creo que no te tengo que decir esto, pero por las dudas, nunca subas el `.env` a un repo, siempre el primer paso es guardar eso en el .gitignore
 
 
 ### Corré el bot
