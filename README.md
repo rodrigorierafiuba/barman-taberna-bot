@@ -228,6 +228,7 @@ Las siguientes funcionalidades están previstas para futuras versiones:
 - [ ] Integración con proveedores musicales adicionales [En revisión, pero posible].
 - [ ] Mejor manejo de videos restringidos o no disponibles.
 - [ ] Mejoras en la recuperación de errores.
+- [ ] Desconectar al bot si esta mucho tiempo inactivo.
 
 El progreso del proyecto se organizará mediante ***GitHub Issues, Pull Requests y Milestones***.
 
