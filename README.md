@@ -164,7 +164,7 @@ El proyecto separa lo que son los comandos de Discord de las fuentes de audio pa
 **Music Cog**: Maneja las interacciones con Discord y coordina la reproducción de música.
 
 > [!NOTE]
-> Spotify se utiliza para obtener la metadata de las canciones. El audio reproducido por el bot se obtiene mediante YouTube y se procesa utilizando `yt-dlp` y FFmpeg.
+> Spotify se utiliza para obtener la metadata de las canciones. El audio reproducido por el bot se obtiene mediante YouTube y se procesa utilizando `yt-dlp` y `FFmpeg`.
 
 ## Hoja de ruta
 
