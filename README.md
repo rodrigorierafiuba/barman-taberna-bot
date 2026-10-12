@@ -38,11 +38,45 @@ Está hecho con `discord.py`, `yt-dlp`, `spotipy` y `FFmpeg`. El proyecto se enf
 
 # Comandos
 
+El Barman tiene comandos para poner música y también para mantener el orden en la taberna. Porque una cosa es tomarse unas birras y otra es empezar a romper todo en la taberna.
+
+### 🎵 Comandos de música
+
+Los comandos musicales utilizan los **Slash Commands** de Discord, es decir, el prefijo `/`.
+
 | Comando | Descripción | Parámetro |
 | ------- | ----------- | --------- |
 | `/join` | Conecta el bot a un canal de voz específico. | `channel` |
 | `/play` | Reproducí cualquier canción de YouTube o un link de Spotify. | `cancion` |
 | `/stop` | Detiene la reproducción y desconecta al bot. | Ninguno |
+
+### 🛡️ Comandos de moderación
+
+Los comandos de moderación utilizan el prefijo `!`. Estos están pensados para mantener el orden dentro del servidor, discretamente, porque el barman de la taberna es un picante y no va con chiquitaje cuando se enoja.
+
+| Comando | Descripción | Parámetro |
+| ------- | ----------- | --------- |
+| `!clear` | Elimina mensajes de un canal de texto. | `cantidad (1-100)` |
+| `!kick` | Expulsa a un miembro del servidor. | `@usuario [razón opcional]` |
+| `!ban` | Banea a un usuario del servidor. | `@usuario [razón opcional]` |
+| `!unban` | Revierte el baneo de un usuario. | `ID del usuario [razón opcional]` |
+| `!timeout` | Restringe temporalmente a un miembro del servidor. | `@usuario minutos [razón opcional]` |
+| `!untimeout` | Elimina la restricción de un miembro. | `@usuario ID_del_servidor` |
+
+> [!IMPORTANT]
+> Para utilizar los comandos de moderación, el usuario y el Barman deben contar con los permisos correspondientes dentro del servidor. Porque el Barman podrá estar borracho, pero no le entrega las llaves de la taberna a cualquiera.
+
+> [!NOTE]
+> Los parámetros entre corchetes `[]` son opcionales. Los demás son obligatorios.
+>
+> Para utilizar `!unban`, necesitás el ID del usuario baneado, ya que no se encuentra dentro del servidor.
+
+### 🍺 Eventos de miembros
+
+Además de reproducir música y moderar, el Barman también se ocupa de recibir y despedir a los miembros de la taberna (porque es educado aunque esté borracho).
+
+- **Bienvenida**: Cuando alguien entra al servidor, el Barman lo recibe con una birra, una imagen falopa y un mensaje personalizado.
+- **Despedida**: Cuando alguien abandona el servidor, el Barman se pone triste, se toma unas birras en su honor y le dedica un último mensaje :(.
 
 # Tecnologías
 
