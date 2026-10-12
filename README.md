@@ -21,7 +21,7 @@
 
 # Barman de la Taberna
 
-**Un bot de Discord hecho en Python, medio borracho pero buena onda, diseñado para moderar, interactuar con miembros y ejecutar música en los canales de voz.**
+**Un bot de Discord, medio borracho pero buena onda, diseñado para moderar, interactuar con miembros y ejecutar música en los canales de voz.**
 
 Barman de la Taberna es un proyecto enfocado actualmente en la reproducción de música desde YouTube, tiene integrado un Algoritmo para captar URL's y URI's de Spotify para luego obtener información de las
 canciones y encontrarlas en YouTube.
