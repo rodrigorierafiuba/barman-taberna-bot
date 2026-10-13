@@ -155,8 +155,8 @@ Antes de intentar ejecutar el bot, tenemos que estar seguros de algunas cosas:
   
   Cuando llegues a esa página, en la pestaña **Developers** elegí la opción **Developers Portal**, ahi haces todo el tramiterio para tu bot y el token.
 
-- Credenciales API para Spotify (Web API), esto es lo más facil te diria, tenes que ir nada más a la página de **Spotify
-Developers**, conectas tu cuenta y reclamas las credenciales.
+- Credenciales API para Spotify (Web API), esto es lo más facil te diria, tenes que ir nada más a la página de [Spotify Developers](https://developer.spotify.com/dashboard), 
+inicias sesión con tu cuenta de Spotify y creas una aplicación. Una vez creada, ahi vas a poder obtener tu **CLIENT_ID** y tu **CLIENT_SECRET** para configurar el bot.
 
 ### Cloná el repositorio
 
