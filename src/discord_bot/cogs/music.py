@@ -58,7 +58,7 @@ class Music(commands.Cog):
         embed: discord.Embed
         if track is not None:
             embed= discord.Embed(title=f"Reproduciendo {track.song_title}",
-                                color=discord.Color.orange(),
+                                color=discord.Color.green(),
                                 url=track.song_url
             )
             embed.description = dedent(f"""
@@ -72,7 +72,7 @@ class Music(commands.Cog):
                 embed.set_image(url=track.album_image)
         else:
             embed = discord.Embed(title=f"Reproduciendo {source.title}",
-                                color=discord.Color.orange(),
+                                color=discord.Color.red(),
                                 url=source.webpage_url
             )
             
