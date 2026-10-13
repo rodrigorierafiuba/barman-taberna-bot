@@ -206,15 +206,18 @@ SPOTIFY_CLIENT_SECRET=tu_client_secret
 > Creo que no te tengo que decir esto, pero por las dudas, nunca subas el `.env` a un repo, siempre el primer paso es guardar eso en el .gitignore
 
 
-### Corré el bot
+### Lanzamiento de tu Bot
 
-Para correr el bot, ejecutá el siguiente comando:
+Antes de ejecutar la aplicación del Bot, tenés que agregarlo a tu servidor de Discord. Para eso, podés invitarlo utilizando el link que encontrás en el **Discord Developer Portal**,
+dentro de la configuración de tu aplicación.
+
+Una vez que el Barman tenga las puertas abiertas de tu taberna, ejecutá el siguiente comando en la terminal:
 
 ```bash
 uv run python -m discord_bot.bot
 ```
 
-Una vez conectado el bot, vas a poder invitarlo a tu servidor de Discord y usar los comandos disponibles hasta la última versión estable de este repositorio.
+Y listo! Tenes a tu bot corriendo en tu servidor y preparado para mandarse unos temas, moderar e interactuar de vez en cuando con los miembros!
 
 ## Hoja de ruta
 
