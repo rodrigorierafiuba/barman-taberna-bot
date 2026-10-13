@@ -54,10 +54,10 @@ Si te interesa ver mejor que es una **URL** o **URI**, te lo muestro facil en un
 URL: https://open.spotify.com/intl-es/track/4C4Xa4ChCQr7cfTFdd5abC?si=fb0c6a21884f49c0 (mi canción favorita btw).
 URI: spotify:track:4C4Xa4ChCQr7cfTFdd5abC (es la misma canción de arriba).
 ```
-Aclarado esto, despues guardar en `SpotifyTrack` la metadata, eso entra en el algoritmo que se creo para este bot, llamado **YTDLSource**, el cual se ocupa de extraer la metadata que se recolecto de **Spotify**, si es que se paso una **URL** o **URI** de **Spotify**, y, sino, se ocupa de buscar la canción mediante el nombre de la canción, o el nombre del artista, como también, acepta **URL's** de **YouTube**.
+Aclarado esto, despues guardar en `SpotifyTrack` la metadata, eso entra en el algoritmo que se creo para este bot, llamado **YTDLSource**, el cual se ocupa de recibir y utilizar la metadata que se recolecto de **Spotify**, si es que se paso una **URL** o **URI** de **Spotify**, y, sino, se ocupa de buscar la canción mediante el nombre de la canción, o el nombre del artista, como también, acepta **URL's** de **YouTube**.
 
 > [!NOTE]
-> Nota de color, como dije previamente, la canción puede ser pasada mediante URL o URI de Spotify, este mismo se utiliza para obtener la metadata de las canciones. El audio reproducido por el bot se obtiene mediante YouTube y se procesa utilizando `yt-dlp` y `FFmpeg`.
+> Nota de color, como dije previamente, la canción puede ser pasada mediante URL o URI de Spotify, este mismo se utiliza para obtener la metadata de las canciones. El audio reproducido por el bot se obtiene mediante YouTube y se procesa utilizando `yt-dlp` para extraer la información necesaria y `FFmpeg` para procesar el audio.
 
 # Comandos
 
