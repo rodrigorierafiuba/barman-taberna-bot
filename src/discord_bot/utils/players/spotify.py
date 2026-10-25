@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+"""
+    Módulo para obtener la metadata que proviene de la URL o URI de Spotify.
+
+    Este módulo se encarga de recolectar toda la metadata proveniente de una URL o URI de Spotify,
+    para luego ser enviado ordenadamente en un SpotifyTrack al mótor de YTDLSource que se encarga
+    de reproducir la canción en Discord mediante YouTube.
+"""
 import spotipy as spotify
 import os
 import asyncio

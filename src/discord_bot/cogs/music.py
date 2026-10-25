@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 import discord
 import logging
+import asyncio
 
 from yt_dlp.utils import DownloadError
 from discord.ext import commands
@@ -9,8 +11,10 @@ from typing import cast, Self
 from textwrap import dedent
 from spotipy.exceptions import SpotifyException
 
-from .players.youtube import YTDLSource
-from .players.spotify import SpotifySource, SpotifyTrack
+from ..utils.players.youtube import YTDLSource
+from ..utils.players.spotify import SpotifySource, SpotifyTrack
+from ..utils.queue_bot.music_queue import MusicQueue
+from ..utils.queue_bot.exceptions_queue import *
 
 
 logger = logging.getLogger(__name__)
@@ -30,10 +34,12 @@ class Music(commands.Cog):
                 bot: Bot del servidor.
         """
         self.bot = bot 
+        self.cola = MusicQueue()
+        self.worker: asyncio.Task[None] | None = None
 
     @staticmethod
     def _crear_embed(track: SpotifyTrack | None,
-                           source: YTDLSource) -> discord.Embed:
+                    source: YTDLSource) -> discord.Embed:
 
         """
             Función que se encarga de crear el Embed para mostrar en el 
@@ -48,9 +54,6 @@ class Music(commands.Cog):
                 source:
                     Fuente de audio obtenida mediante yt-dlp, contiene también
                     la metadata del video de Youtube buscado.
-                
-                cancion:
-                    Cancion a reproducir en el canal de voz de discord.
             
             Returns:
                 Un embed preparado para mostrar en un chat de texto con la información
@@ -105,17 +108,28 @@ class Music(commands.Cog):
             Aclaracion:
                 Previamente a ejecutar esta función, se sabe de antemano que source y voice_client no son None. [Mirar función async def play().]
         """
+        loop = asyncio.get_running_loop()
+        finalizo = asyncio.Event()
+
+        def _al_terminar(error: Exception | None) -> None:
+            """
+                Al terminar una canción, el callback necesita acceder a loop y finalizo.
+                Esta función callback es clave para la comunicación entre Discord y Asyncio.
+            """
+            if error:
+                logger.error("Error del reproductor: %s", error)
+
+            loop.call_soon_threadsafe(finalizo.set)
+
         try:
-            voice_client.play(source=source, after=lambda error: (logger.error("Error del reproductor: %s", error) if error else None))
+            voice_client.play(source=source, after=_al_terminar)
+            await finalizo.wait()
+            return True
 
         except (discord.ClientException, OSError) as err:
             source.cleanup()
             logger.exception("No se pudo iniciar la reproducción. | Error = %s", err)
-            await interaction.followup.send("El Barman tuvo un problema con el audio, se rompio el cassette.")
             return False
-
-        else:
-            return True
 
     @staticmethod
     async def _ejecutar_yt(interaction: discord.Interaction, *, cancion: str) -> YTDLSource | None:
@@ -149,6 +163,44 @@ class Music(commands.Cog):
 
         else:
             return source
+
+    @staticmethod
+    async def _worker(cola: MusicQueue,
+                      interaction: discord.Interaction,
+                      voice_client: discord.VoiceClient) -> None:
+        """
+            Función asíncrona que se encarga de iniciar el worker
+            que trabaja en la cola de reproducción, la mantiene activa
+            y hace todo el trabajo pesado con la instancia MusicQueue.
+        
+            Args:
+                cola:
+                    Instancia de MusicQueue que guarda todos los datos
+                    y ejecuta las operaciones correspondientes.
+                interaction:
+                    Contexto para el comando en ejecución.
+                voice_client:
+                    Cliente a conectarse al canal de voz.
+        """
+
+        while True:
+            try:
+                source = await cola.desencolar()
+
+            except MusicQueueInactive:
+                logger.exception("La cola se cerro. Finalizando worker.")
+                break
+
+            logger.info("Se desencolo la canción: %s", source.title)
+            if not voice_client.is_connected():
+                source.cleanup()
+                break
+
+            reproducida = await Music._reproducir_cancion(interaction, voice_client, source)
+            if not reproducida:
+                await interaction.followup.send("Amigo, quise meter el casette y estaba tan borracho que se rompio, perdona bro.")
+            
+
 
     @app_commands.command(name="join", description="Unirse a un canal de voz.")
     @app_commands.guild_only()
@@ -201,24 +253,19 @@ class Music(commands.Cog):
             cancion: Nombre de la canción o URL.
 
         """
-        await interaction.response.defer(thinking=True)
-
         spotify_source = SpotifySource()
         guild = interaction.guild
 
         if guild is None:
             await interaction.followup.send("Este comando solo funciona en servidores.")
             return
-        
+
+        await interaction.response.defer(thinking=True)
         # casteo el voice_client de VoiceProtocol a VoiceClient, si no es una tortura intentar usar play.
         voice_client = cast(discord.VoiceClient | None, guild.voice_client)
 
         if voice_client is None or not voice_client.is_connected():
             await interaction.followup.send("Mágico no soy amigo, soy barman. Conectame con /join.")
-            return
-
-        if voice_client.is_playing() or voice_client.is_paused():
-            await interaction.followup.send("Estás manija, no te gusta la música, ta bien, te entiendo. Mejor desconectame, salchicha.")
             return
 
         try:
@@ -236,16 +283,56 @@ class Music(commands.Cog):
             source = await self._ejecutar_yt(interaction, cancion=cancion)
             if source is None:
                 return
-            
-        # reproducción del cliente, si falla algo, limpio el source y doy un mensaje q fallo la repro.
-        cancion_reproducida = await self._reproducir_cancion(interaction, voice_client, source)
-        if not cancion_reproducida:
+
+        # encolar a la lista de reproducción.
+        try:
+            self.cola.encolar(source)
+        except FullMusicQueue:
+            source.cleanup()
+            await interaction.followup.send(f"Amigo que re carajeanos pedis, ya meti {self.cola.capacidad} casettes."
+                                            "\nAguanta a que termine 1 canción bro")
+            return
+        except MusicQueueInactive:
+            source.cleanup()
+            await interaction.followup.send("Amigo ya me desconecte y me tome 8 vodkas, si queres una canción conectame (toy re borracho igual.).")
             return
 
+        if self.worker is None or self.worker.done():
+            self.worker = asyncio.create_task(self._worker(self.cola, interaction, voice_client))
+
         embed = self._crear_embed(track, source)
+        await interaction.followup.send("AH ESTAS PONIENDO LINDOS TEMAS, te veo re manija wacho, mas vale que bailes\n", embed=embed)
 
-        await interaction.followup.send(f"Baila o te saco de la taberna wachoo!", embed=embed)
+    @app_commands.command(name="skip", description="Para saltear una canción en reproducción.")
+    @app_commands.guild_only()
+    @app_commands.allowed_installs(guilds=True, users=False)
+    async def skip(self: Self, interaction: discord.Interaction) -> None:
+        """
+            Función que se ocupa de skipear la canción actual y continuar con
+            la cola de reproducción, si es que esta última está activa.
 
+            Args:
+                interaction:
+                    Contexto para el comando de ejecución.
+        """
+        await interaction.response.defer(thinking=True)
+        guild = interaction.guild
+
+        if guild is None:
+            await interaction.response.send_message("Este comando solo funciona en servidores.")
+            return
+
+        voice_client = cast(discord.VoiceClient | None, guild.voice_client)
+        if voice_client is None or not voice_client.is_connected():
+            await interaction.followup.send("Amigo, primero conectame con el /join.")
+            return
+
+        if not voice_client.is_playing() and not voice_client.is_paused():
+            await interaction.followup.send("Amigo no hay ninguna canción para saltear, que te pensas, que soy boludo?\nManda un tema wacho.")
+            return
+
+        voice_client.stop()
+        await interaction.followup.send("Ah pero no me dejas disfrutar un tema porque te encanta skippear gil.")
 
     @app_commands.command(name="stop", description="Para desconectar al bot del canal de voz.")
     @app_commands.guild_only()
@@ -274,6 +361,16 @@ class Music(commands.Cog):
         
         if voice_client.is_playing() or voice_client.is_paused():
             voice_client.stop()
+
+        if self.worker is not None:
+            self.worker.cancel()
+            try:
+                await self.worker
+            except asyncio.CancelledError:
+                pass
+            self.worker = None
+
+        self.cola.vaciar()
 
         await voice_client.disconnect()
         await interaction.followup.send("Ok amigo, desconecte el casette, pero la proxima tenes que pagar 2 birras si queres que desconecte la musica.")

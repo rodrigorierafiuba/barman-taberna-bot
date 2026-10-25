@@ -1,3 +1,15 @@
+#!/usr/bin/env python
+"""
+    Motor de youtube implementado para reproducir canciones por busqueda de texto y canciones.
+
+    El corazón del motor es YTDLSource, 
+    que representa una fuente de audio obtenida mediante yt-dlp,
+    preparada para su reproducción en un canal de voz de Discord.
+
+    Se encarga de almacenar los metadatos de la canción,
+    configurar la fuente de audio con FFmpeg y 
+    permitir el control de volumen durante la reproducción.
+"""
 import discord
 import yt_dlp as youtube_dl
 import asyncio
