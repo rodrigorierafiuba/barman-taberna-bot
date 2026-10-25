@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Copyright (c) 2026 Rodrigo Riera.
+# SPDX-License-Identifier: MIT
+
 """
     Módulo para generar una cola de reproducción en el Bot de discord para música.
 

@@ -224,10 +224,6 @@ Y listo! Tenes a tu bot corriendo en tu servidor y preparado para mandarse unos 
 
 Las siguientes funcionalidades están previstas para futuras versiones:
 
-- [ ] Soporte de listas de reproducción.
-- [ ] Sistema de cola musical.
-- [ ] Comando `/skip`.
-- [ ] Modificar `/stop` para detener la reproducción sin desconectarse.
 - [ ] Comando `/disconnect`.
 - [ ] Integración con proveedores musicales adicionales [En revisión, pero posible].
 - [ ] Mejor manejo de videos restringidos o no disponibles.
@@ -236,11 +232,18 @@ Las siguientes funcionalidades están previstas para futuras versiones:
 
 El progreso del proyecto se organizará mediante ***GitHub Issues, Pull Requests y Milestones***.
 
-## Contribuciones
+## License / Licencia
 
-Las contribuciones por el momento están cerradas, pero cualquier sugerencia o reporte de bug es bienvenido.
-Si encontrás un problema o tenés una idea para una nueva característica, sentite libre de generar un **Issue**.
+BarmanTaberna is open-source software licensed under the **MIT License**.
 
-## Licencia
+You are free to use, modify, share, and distribute this project, including for commercial purposes, provided that the original copyright notice and license are preserved.
 
-La información de la licencia va a ser agregada una vez que haya sido seleccionada.
+BarmanTaberna es software de código abierto distribuido bajo la **licencia MIT**.
+
+Podés utilizar, modificar, compartir y distribuir el proyecto, incluso comercialmente, siempre que conserves el aviso de copyright original y la licencia.
+
+## Contributions / Contribuciones
+
+**Contributions are not being accepted at this time.** The project is currently maintained exclusively by its original author.
+
+**Por el momento no se aceptan contribuciones de código.** El proyecto es mantenido exclusivamente por su autor original.

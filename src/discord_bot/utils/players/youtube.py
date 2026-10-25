@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Copyright (c) 2026 Rodrigo Riera.
+# SPDX-License-Identifier: MIT
+
 """
     Motor de youtube implementado para reproducir canciones por busqueda de texto y canciones.
 

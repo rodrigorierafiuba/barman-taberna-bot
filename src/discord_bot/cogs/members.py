@@ -1,13 +1,11 @@
 #!/usr/bin/env python
+
+# Copyright (c) 2026 Rodrigo Riera.
+# SPDX-License-Identifier: MIT
+
 import discord
 import logging
 from discord.ext import commands
-
-
-# TODO: Configurar logger.
-# TODO: Cuando se kickea a un usuario, mandar un md.
-# TODO: Asignar un rol cuando el usuario se une.
-
 
 logger = logging.getLogger(__name__)
 

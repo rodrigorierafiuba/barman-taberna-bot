@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Copyright (c) 2026 Rodrigo Riera.
+# SPDX-License-Identifier: MIT
+
 import discord
 import logging
 import asyncio

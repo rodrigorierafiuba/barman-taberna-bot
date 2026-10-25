@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Copyright (c) 2026 Rodrigo Riera.
+# SPDX-License-Identifier: MIT
+
 """
     Módulo para obtener la metadata que proviene de la URL o URI de Spotify.
 

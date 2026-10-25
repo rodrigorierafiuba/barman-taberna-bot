@@ -1,4 +1,6 @@
 import asyncio
+# Copyright (c) 2026 Rodrigo Riera.
+# SPDX-License-Identifier: MIT
 
 """
     Módulo de excepciones de la cola de reproducción.
