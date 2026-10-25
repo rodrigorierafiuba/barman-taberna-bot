@@ -71,6 +71,7 @@ Los comandos musicales utilizan los **Slash Commands** de Discord, es decir, el 
 | ------- | ----------- | --------- |
 | `/join` | Conecta el bot a un canal de voz específico. | `channel` |
 | `/play` | Reproducí cualquier canción de YouTube o un link de Spotify. | `cancion` |
+| `/skip` | Saltea a la próxima canción de la cola de reproducción | `interaction` |
 | `/stop` | Detiene la reproducción y desconecta al bot. | Ninguno |
 
 ### 🛡️ Comandos de moderación
