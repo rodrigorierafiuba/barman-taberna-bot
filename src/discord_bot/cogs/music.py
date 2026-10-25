@@ -53,11 +53,13 @@ class Music(commands.Cog):
                     Cancion a reproducir en el canal de voz de discord.
             
             Returns:
+                Un embed preparado para mostrar en un chat de texto con la información
+                de la canción.
                 
         """
         embed: discord.Embed
         if track is not None:
-            embed= discord.Embed(title=f"Reproduciendo {track.song_title}",
+            embed = discord.Embed(title=f"Reproduciendo {track.song_title}",
                                 color=discord.Color.green(),
                                 url=track.song_url
             )
