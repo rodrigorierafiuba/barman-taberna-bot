@@ -38,7 +38,7 @@ class Music(commands.Cog):
                 bot: Bot del servidor.
         """
         self.bot = bot 
-        self.cola = MusicQueue()
+        self.cola = MusicQueue(maxsize=200)
         self.worker: asyncio.Task[None] | None = None
 
     @staticmethod
@@ -186,10 +186,14 @@ class Music(commands.Cog):
                 voice_client:
                     Cliente a conectarse al canal de voz.
         """
-
+        
         while True:
             try:
                 source = await cola.desencolar()
+
+                embed = Music._crear_embed(None, source)
+                if isinstance(interaction.channel, discord.TextChannel):
+                    await interaction.channel.send("Baila en la taberna o te saco wachooo.\n", embed=embed)
 
             except MusicQueueInactive:
                 logger.exception("La cola se cerro. Finalizando worker.")
@@ -272,39 +276,65 @@ class Music(commands.Cog):
             await interaction.followup.send("Mágico no soy amigo, soy barman. Conectame con /join.")
             return
 
-        try:
-            track = await spotify_source.track_from_url(cancion)
-        except SpotifyException:
-            await interaction.followup.send("Amigo, estoy tan borracho q creo q spotify me reboto la entrada")
-            return
-        
-        if track is not None:
-            source = await self._ejecutar_yt(interaction, cancion=f"{track.song_title} - {track.artist_name}")
-            if source is None:
-                return
-        else:
-            # busco y preparo la fuente de audio
-            source = await self._ejecutar_yt(interaction, cancion=cancion)
-            if source is None:
-                return
+        track = None
+        urls = await YTDLSource.obtener_playlist(cancion) if "list=" in cancion else None
+        if urls is not None:
+            await interaction.followup.send(f"Encontré {len(urls)} canciones, DALE QUE SE PICA.!")
+            # modularizar la lógica de playlist.
+            for url in urls:
+                source = await self ._ejecutar_yt(interaction, cancion=url)
+                if source is None:
+                    return
 
-        # encolar a la lista de reproducción.
-        try:
-            self.cola.encolar(source)
-        except FullMusicQueue:
-            source.cleanup()
-            await interaction.followup.send(f"Amigo que re carajeanos pedis, ya meti {self.cola.capacidad} casettes."
-                                            "\nAguanta a que termine 1 canción bro")
-            return
-        except MusicQueueInactive:
-            source.cleanup()
-            await interaction.followup.send("Amigo ya me desconecte y me tome 8 vodkas, si queres una canción conectame (toy re borracho igual.).")
-            return
+                try:
+                    self.cola.encolar(source)
+                except (FullMusicQueue, MusicQueueInactive):
+                    source.cleanup()
+                    await interaction.followup.send("Amigo para un poco, no puedo agregar más canciones, estas re manija bro.")
+                    return
+                
+                if self.worker is None or self.worker.done():
+                    self.worker = asyncio.create_task(self._worker(self.cola, interaction, voice_client))
+
+        else:
+            # modularizar la lógica de url o canción unitaria.
+            try:
+                track = await spotify_source.track_from_url(cancion)
+            except SpotifyException:
+                await interaction.followup.send("Amigo, estoy tan borracho q creo q spotify me reboto la entrada")
+                return
+        
+            if track is not None:
+                source = await self._ejecutar_yt(interaction, cancion=f"{track.song_title} - {track.artist_name}")
+                if source is None:
+                    return
+            else:
+                # busco y preparo la fuente de audio
+                source = await self._ejecutar_yt(interaction, cancion=cancion)
+                if source is None:
+                    return
+
+            try:
+                self.cola.encolar(source)
+            except FullMusicQueue:
+                source.cleanup()
+                await interaction.followup.send(f"Amigo que re carajeanos pedis, ya meti {self.cola.capacidad} casettes."
+                                                "\nAguanta a que termine 1 canción bro")
+                return
+            except MusicQueueInactive:
+                source.cleanup()
+                await interaction.followup.send("Amigo ya me desconecte y me tome 8 vodkas, si queres una canción conectame (toy re borracho igual.).")
+                return
 
         if self.worker is None or self.worker.done():
             self.worker = asyncio.create_task(self._worker(self.cola, interaction, voice_client))
 
-        embed = self._crear_embed(track, source)
+        if urls is not None:
+            embed = discord.Embed(title="🍻 Playlist agregada a la taberna",
+                                  description=f"Agregue {len(urls)} canciones, más vale que las escuches todas amigo, sino pum pum PIKANAZO.")
+        else:
+            embed = self._crear_embed(track, source)
+
         await interaction.followup.send("AH ESTAS PONIENDO LINDOS TEMAS, te veo re manija wacho, mas vale que bailes\n", embed=embed)
 
     @app_commands.command(name="skip", description="Para saltear una canción en reproducción.")

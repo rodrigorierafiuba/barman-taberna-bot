@@ -119,6 +119,39 @@ class YTDLSource(discord.PCMVolumeTransformer):
 
         return f"{minutos}:{segundos:02d}"
 
+    @staticmethod
+    async def obtener_playlist(url: str) -> list[str] | None:
+        """
+            Método estático que a partir de una url de una playlist,
+            obtiene todas las canciones para ser encoladas en el reproductor
+            de música del bot de discord.
+
+            Args:
+                url:
+                    Url de la playlist.
+            
+            Returns:
+                Listado de URL's a reproducir.
+        """
+
+        opciones = {
+            **ytdl_format_options,
+            "noplaylist": False,
+            "extract_flat": "in_playlist",
+            "skip_download": True,
+        }
+
+        ydl = youtube_dl.YoutubeDL(cast("youtube_dl._Params", opciones))
+        data = await asyncio.to_thread(ydl.extract_info, url, download=False)
+
+        if not data or data.get("_type") != "playlist" or data.get("extractor_key") != "YoutubeTab":
+            return None
+
+        return [f"https://www.youtube.com/watch?v={entry["id"]}"
+                for entry in data.get("entries", [])
+                if entry and entry.get("id")
+            ]
+
     @classmethod
     async def from_url(cls: type[Self], cancion: str, *,
                        loop: asyncio.AbstractEventLoop | None = None,
