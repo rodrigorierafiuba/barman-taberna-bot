@@ -329,14 +329,6 @@ class Music(commands.Cog):
         if self.worker is None or self.worker.done():
             self.worker = asyncio.create_task(self._worker(self.cola, interaction, voice_client))
 
-        if urls is not None:
-            embed = discord.Embed(title="🍻 Playlist agregada a la taberna",
-                                  description=f"Agregue {len(urls)} canciones, más vale que las escuches todas amigo, sino pum pum PIKANAZO.")
-        else:
-            embed = self._crear_embed(track, source)
-
-        await interaction.followup.send("AH ESTAS PONIENDO LINDOS TEMAS, te veo re manija wacho, mas vale que bailes\n", embed=embed)
-
     @app_commands.command(name="skip", description="Para saltear una canción en reproducción.")
     @app_commands.guild_only()
     @app_commands.allowed_installs(guilds=True, users=False)
