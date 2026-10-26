@@ -125,7 +125,7 @@ Antes de intentar ejecutar el bot, tenemos que estar seguros de algunas cosas:
 
   **-->** [Descargar Python](https://www.python.org/downloads/)
   
-  Para este proyecto yo utilicé ***Python 3.11.5***, pero la versión que recomiendo que instales en tu maquina es ***Python 3.14.8***
+  Para este proyecto yo utilicé ***Python 3.13.14***, pero la versión que recomiendo que instales en tu maquina es ***Python 3.14.8***
 
 - `FFmpeg`: Tiene que estar **sí o sí** instalado. Si no lo tenés, podés descargarlo acá:
 
