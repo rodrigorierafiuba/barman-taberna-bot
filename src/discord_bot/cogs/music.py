@@ -309,13 +309,17 @@ class Music(commands.Cog):
                 if source is None:
                     return
             else:
+                await interaction.followup.send("Preparando la reproducción amigooo, dale que se pica la taberna wacho.")
                 # busco y preparo la fuente de audio
                 source = await self._ejecutar_yt(interaction, cancion=cancion)
                 if source is None:
-                    return
-
+                    return 
             try:
                 self.cola.encolar(source)
+                if self.worker is not None and not self.worker.done():
+                    embed = self._crear_embed(track, source)
+                    embed.title = f"Agregada a la cola: {source.title}"
+                    await interaction.followup.send("Canción agregada a la cola amigo!\nDale que se vienee!", embed=embed)
             except FullMusicQueue:
                 source.cleanup()
                 await interaction.followup.send(f"Amigo que re carajeanos pedis, ya meti {self.cola.capacidad} casettes."
