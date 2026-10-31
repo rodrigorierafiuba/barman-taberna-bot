@@ -39,7 +39,7 @@ ytdl_format_options = {
     'no_warnings': True,
     'default_search': 'auto',
     'source_address': '0.0.0.0', # formato ipv4, ipv6 a veces tiene errores.
-    'cookiefile': 'cookies.txt' # VITAL para que no frene al bot, necesitas crear un cookies.txt
+    'cookiefile': str(COOKIES_PATH) # VITAL para que no frene al bot, necesitas crear un cookies.txt
 }
 
 ffmpeg_options = {

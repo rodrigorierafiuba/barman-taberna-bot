@@ -206,6 +206,20 @@ SPOTIFY_CLIENT_SECRET=tu_client_secret
 > [!WARNING]
 > Creo que no te tengo que decir esto, pero por las dudas, nunca subas el `.env` a un repo, siempre el primer paso es guardar eso en el .gitignore
 
+### Nueva Feature [Cookies]
+
+> [!WARNING]
+> Vas a necesitar configurar un cookies.txt para poder reproducir tranquilamente playlists de YouTube, esto sirve para
+> poder loguearte, ya que sino, luego de muchos requests a la API de YouTube sos bloqueado.
+
+Si necesitas saber como exportar un archivo de tipo `cookies.txt`, podes ver el siguiente video:
+
+  **-->** [Tutorial](https://www.youtube.com/watch?v=OBu6TJmluiQ)
+
+Es un muy buen tutorial y te enseña lo facil que es crear este archivo! Es **VITAL** para evitar los bloqueos de YouTube.
+
+> [!IMPORTANT]
+> Nunca, pero NUNCA agregues el cookies.txt a tu repositorio, tiene tus credenciales de YouTube.
 
 ### Lanzamiento de tu Bot
 
