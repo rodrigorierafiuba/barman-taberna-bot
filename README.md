@@ -212,7 +212,7 @@ SPOTIFY_CLIENT_SECRET=tu_client_secret
 > Vas a necesitar configurar un cookies.txt para poder reproducir tranquilamente playlists de YouTube, esto sirve para
 > poder loguearte, ya que sino, luego de muchos requests a la API de YouTube sos bloqueado.
 
-Si necesitas saber como exportar un archivo de tipo `cookies.txt`, podes ver el siguiente video:
+Si necesitas saber como armar un archivo de tipo `cookies.txt`, podes ver el siguiente video:
 
   **-->** [Tutorial](https://www.youtube.com/watch?v=OBu6TJmluiQ)
 
