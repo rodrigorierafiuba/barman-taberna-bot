@@ -1,2 +1,1 @@
-def main() -> None:
-    print("Hello from discord-bot!")
+#!/usr/bin/env python
