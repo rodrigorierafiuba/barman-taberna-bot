@@ -22,8 +22,11 @@ import sys
 
 from time import perf_counter
 from typing import cast, Mapping, Any, Self
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+COOKIES_PATH = Path(__file__).resolve().parents[3] / "cookies.txt" # Esto es si cookies.txt esta en la raíz del proyecto.
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
@@ -35,7 +38,8 @@ ytdl_format_options = {
     'quiet': True,
     'no_warnings': True,
     'default_search': 'auto',
-    'source_address': '0.0.0.0' # formato ipv4, ipv6 a veces tiene errores.
+    'source_address': '0.0.0.0', # formato ipv4, ipv6 a veces tiene errores.
+    'cookiefile': 'cookies.txt' # VITAL para que no frene al bot, necesitas crear un cookies.txt
 }
 
 ffmpeg_options = {
